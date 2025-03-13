@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register External Account</title>
+</head>
+<body>
+    <h1>Register External Account</h1>
+
+    <form id="registerAccountSubmitForm">
+        <label for="bank_name">Bank Name:</label>
+        <input type="text" id="bank_name" name="bank_name" required><br><br>
+
+        <label for="account_owner_name">Account Owner Name:</label>
+        <input type="text" id="account_owner_name" name="account_owner_name" required><br><br>
+
+        <label for="account_number">Account Number:</label>
+        <input type="text" id="account_number" name="account_number" required><br><br>
+
+        <label for="routing_number">Routing Number:</label>
+        <input type="text" id="routing_number" name="routing_number" required><br><br>
+
+        <label for="street_line_1">Street Line 1:</label>
+        <input type="text" id="street_line_1" name="street_line_1" required><br><br>
+
+        <label for="street_line_2">Street Line 2:</label>
+        <input type="text" id="street_line_2" name="street_line_2"><br><br>
+
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required><br><br>
+
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required><br><br>
+
+        <label for="postal_code">Postal Code:</label>
+        <input type="text" id="postal_code" name="postal_code" required><br><br>
+
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="country" required><br><br>
+
+        <label for="on_behalf_external_customer_id">On Behalf External Customer ID:</label>
+        <input type="text" id="on_behalf_external_customer_id" name="on_behalf_external_customer_id" required><br><br>
+
+        <button type="submit">Register Account</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        document.getElementById("registerAccountSubmitForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = {
+                bank_name: document.getElementById("bank_name").value,
+                account_owner_name: document.getElementById("account_owner_name").value,
+                account_number: document.getElementById("account_number").value,
+                routing_number: document.getElementById("routing_number").value,
+                type: "wire",
+                on_behalf_external_customer_id: document.getElementById("on_behalf_external_customer_id").value,
+                address: {
+                    street_line_1: document.getElementById("street_line_1").value,
+                    street_line_2: document.getElementById("street_line_2").value,
+                    city: document.getElementById("city").value,
+                    state: document.getElementById("state").value,
+                    postal_code: document.getElementById("postal_code").value,
+                    country: document.getElementById("country").value
+                }
+            };
+
+            fetch('http://localhost:3000/external-accounts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

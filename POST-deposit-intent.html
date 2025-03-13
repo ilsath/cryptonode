@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Deposit Intent</title>
+</head>
+<body>
+    <!-- Formulario para crear un depósito -->
+    <h2>Create Deposit Intent</h2>
+    <form id="depositIntentForm">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" step="0.01" placeholder="Enter amount" required><br><br>
+
+        <label for="destination_currency">Destination Currency:</label>
+        <select id="destination_currency" name="destination_currency" required>
+            <option value="usdc">USDC</option>
+            <option value="usdt">USDT</option>
+        </select><br><br>
+
+        <label for="on_behalf_external_customer_id">On Behalf External Customer ID:</label>
+        <input type="text" id="on_behalf_external_customer_id" name="on_behalf_external_customer_id" placeholder="Enter customer ID" required><br><br>
+
+        <button type="submit">Create Deposit Intent</button>
+    </form>
+
+    <!-- Sección de respuesta -->
+    <div id="response"></div>
+
+    <!-- Script para manejar el envío del formulario -->
+    <script>
+        document.getElementById("depositIntentForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = {
+                amount: parseFloat(document.getElementById("amount").value),
+                destination_currency: document.getElementById("destination_currency").value,
+                on_behalf_external_customer_id: document.getElementById("on_behalf_external_customer_id").value
+            };
+
+            fetch('http://localhost:3000/deposit-intents', {  // Cambia la URL si es necesario
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(err => { throw new Error(err); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("response").innerText = `Error: ${error.message}`;
+            });
+        });
+    </script>
+</body>
+</html>

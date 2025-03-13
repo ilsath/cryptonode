@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Webhook</title>
+</head>
+<body>
+    <!-- Register Webhook Form -->
+    <div id="registerWebhookForm">
+        <h2>Register Webhook Form</h2>
+        <form id="registerWebhookSubmitForm">
+            <label for="callback_url">Callback URL:</label>
+            <input type="text" id="callback_url" name="callback_url" required><br><br>
+            <button type="submit">Register Webhook</button>
+        </form>
+    </div>
+
+    <!-- Response Section -->
+    <div id="response"></div>
+
+    <!-- Script para manejar el registro del webhook -->
+    <script>
+        document.getElementById("registerWebhookSubmitForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = {
+                callback_url: document.getElementById("callback_url").value
+            };
+
+            fetch('http://localhost:3000/webhook', {  // Asegúrate de apuntar a la ruta correcta en tu servidor Node.js
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Mostrar respuesta en la página
+                document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

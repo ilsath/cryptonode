@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get External Accounts</title>
+</head>
+<body>
+    <h1>Get External Accounts</h1>
+    <form id="getExternalAccountsForm">
+        <label for="externalCustomerId">External Customer ID:</label>
+        <input type="text" id="externalCustomerId" name="externalCustomerId" required><br><br>
+        <button type="submit">Get External Accounts</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        document.getElementById("getExternalAccountsForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const externalCustomerId = document.getElementById("externalCustomerId").value;
+
+            fetch(`http://localhost:3000/external-accounts?on_behalf_external_customer_id=${externalCustomerId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById("response").innerText = `Error: ${error.message}`;
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

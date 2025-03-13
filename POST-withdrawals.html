@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal Form</title>
+</head>
+<body>
+    <h2>Withdrawal Form</h2>
+    <form id="withdrawalSubmitForm">
+        <label for="amount">Amount:</label>
+        <input type="text" id="amount" name="amount" required><br><br>
+
+        <!-- Hidden fields with required parameters -->
+        <input type="hidden" id="asset" name="asset" value="usd">
+        <input type="hidden" id="currency" name="currency" value="usd">
+        <input type="hidden" id="method" name="method" value="bridge">
+        <input type="hidden" id="network" name="network" value="bridge">
+        <input type="hidden" id="protocol" name="protocol" value="wire">
+
+        <label for="wire_message">Wire Message:</label>
+        <input type="text" id="wire_message" name="wire_message"><br><br>
+
+        <label for="external_account_id">External Account ID:</label>
+        <input type="text" id="external_account_id" name="external_account_id" required><br><br>
+
+        <label for="on_behalf_external_customer_id">On Behalf External Customer ID:</label>
+        <input type="text" id="on_behalf_external_customer_id" name="on_behalf_external_customer_id" required><br><br>
+
+        <label for="origin_id">Origin ID:</label>
+        <input type="text" id="origin_id" name="origin_id" required><br><br>
+
+        <button type="submit">Withdraw</button>
+    </form>
+
+    <!-- Response Section -->
+    <div id="response"></div>
+
+    <script>
+        document.getElementById("withdrawalSubmitForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = {
+                amount: document.getElementById("amount").value,
+                asset: document.getElementById("asset").value,
+                currency: document.getElementById("currency").value,
+                method: document.getElementById("method").value,
+                network: document.getElementById("network").value,
+                protocol: document.getElementById("protocol").value,
+                wire_message: document.getElementById("wire_message").value,
+                external_account_id: document.getElementById("external_account_id").value,
+                on_behalf_external_customer_id: document.getElementById("on_behalf_external_customer_id").value,
+                origin_id: document.getElementById("origin_id").value
+            };
+
+            fetch('http://localhost:3000/withdraw', { // Actualizado para el servidor Node.js
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

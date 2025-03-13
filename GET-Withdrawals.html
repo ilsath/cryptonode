@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET Withdrawals</title>
+</head>
+<body>
+    <h2>GET Withdrawals</h2>
+    <form id="getWithdrawalsForm">
+        <label for="on_behalf_external_customer_id">on_behalf_external_customer_id:</label>
+        <input type="text" id="on_behalf_external_customer_id" name="on_behalf_external_customer_id"><br><br>
+        <label for="origin_ids">origin_ids:</label>
+        <input type="text" id="origin_ids" name="origin_ids"><br><br>
+        <button type="submit">Get Withdrawals</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById("getWithdrawalsForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const onBehalfId = document.getElementById("on_behalf_external_customer_id").value;
+            const originIds = document.getElementById("origin_ids").value;
+
+            let url = `http://localhost:3000/withdrawals?on_behalf_external_customer_id=${onBehalfId}`;
+            if (originIds) {
+                url += `&origin_ids=${originIds}`;
+            }
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("response").innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
