@@ -83,6 +83,26 @@ app.get('/deposit-intents', async (req, res) => {
     }
 });
 
+// Ruta para eliminar una cuenta externa por ID
+app.delete('/external-accounts/:externalAccountId', async (req, res) => {
+    try {
+        const { externalAccountId } = req.params;
+
+        if (!externalAccountId) {
+            return res.status(400).json({ error: 'El parámetro externalAccountId es obligatorio' });
+        }
+
+        const response = await bitsoSdk.deleteExternalAccountById(externalAccountId);
+        
+        // Ajusta según la estructura de respuesta esperada
+        res.status(response.success ? 200 : 400).json(response);
+    } catch (error) {
+        console.error('Error al eliminar la cuenta externa:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 app.post('/webhook', async (req, res) => {
     try {
         const data = req.body;
