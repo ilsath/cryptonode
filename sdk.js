@@ -69,8 +69,8 @@ class BitsoSDK {
         return await this._makeRequest('POST', endpoint, jsonPayload);
     }
     
-    async deleteExternalAccountById(externalAccountId) {
-        const endpoint = `/api/v3/payments/usd/bridge/external-accounts/${externalAccountId}`;
+    async deleteExternalAccountById(externalAccountId, onBehalfExternalCustomerId) {
+        const endpoint = `/api/v3/payments/usd/bridge/external-accounts/${externalAccountId}?on_behalf_external_customer_id=${onBehalfExternalCustomerId}`;
         return await this._makeRequest('DELETE', endpoint);
     }
 
